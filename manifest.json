@@ -1,0 +1,16 @@
+{
+  "name": "FocusFlow OS",
+  "short_name": "FocusFlow",
+  "description": "Produto SaaS de produtividade com pipeline, foco, analytics e automacoes.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f6fb",
+  "theme_color": "#087060",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

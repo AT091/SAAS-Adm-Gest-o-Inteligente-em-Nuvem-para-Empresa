@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusFlow OS - SaaS de produtividade</title>
+    <meta
+      name="description"
+      content="FocusFlow OS e um produto SaaS de produtividade com pipeline, foco, analytics, automacoes e gestao de prioridades."
+    />
+    <meta name="theme-color" content="#087060" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="app-config.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#overview">Pular para o conteudo</a>
+
+    <header class="site-header">
+      <a class="site-brand" href="#overview" aria-label="FocusFlow OS">
+        <span class="brand-mark">F</span>
+        <span>FocusFlow OS</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegacao do site">
+        <a href="#overview">Produto</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#analytics">Analytics</a>
+        <a href="#security">Seguranca</a>
+        <a href="#plans">Planos</a>
+      </nav>
+
+      <a class="site-cta" href="#pipeline">Comecar agora</a>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Menu lateral">
+        <a class="brand" href="#overview" aria-label="FocusFlow OS">
+          <span class="brand-mark">F</span>
+          <span>
+            <strong>FocusFlow OS</strong>
+            <small>Execution platform</small>
+          </span>
+        </a>
+
+        <nav class="nav-list" aria-label="Navegacao principal">
+          <a class="active" href="#overview">Overview</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#focus">Focus room</a>
+          <a href="#analytics">Analytics</a>
+          <a href="#automation">Automacoes</a>
+        </nav>
+
+        <section class="workspace-card" aria-label="Workspace">
+          <span class="workspace-badge">Business</span>
+          <h2>Workspace pessoal</h2>
+          <p id="coachMessage">Crie prioridades para ativar previsoes.</p>
+          <div class="workspace-meter">
+            <span></span>
+          </div>
+        </section>
+
+        <button class="theme-toggle" type="button" id="themeToggle">
+          <span id="themeLabel">Tema escuro</span>
+        </button>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar" id="overview">
+          <div>
+            <p class="eyebrow">Command center</p>
+            <h1>Planeje, priorize e execute como um time de alta performance.</h1>
+          </div>
+
+          <div class="topbar-actions">
+            <div class="date-pill" id="currentDate"></div>
+            <span class="account-status" id="accountStatus">Modo local</span>
+            <span class="account-status plan-status" id="planStatus">Free</span>
+            <button class="ghost-button" type="button" id="upgradePro">
+              Upgrade Pro
+            </button>
+            <button class="ghost-button" type="button" id="authGoogle">
+              Google
+            </button>
+            <button class="ghost-button" type="button" id="authApple">
+              Apple
+            </button>
+            <button class="ghost-button" type="button" id="signOut" hidden>
+              Sair
+            </button>
+            <button class="ghost-button" type="button" id="syncCloud">
+              Sincronizar
+            </button>
+            <button class="ghost-button" type="button" id="commandOpen">
+              Command
+            </button>
+            <button class="ghost-button" type="button" id="exportWorkspace">
+              Exportar
+            </button>
+            <label class="ghost-button import-button">
+              Importar
+              <input id="importWorkspace" type="file" accept="application/json" />
+            </label>
+            <button class="ghost-button" type="button" id="clearDone">
+              Arquivar concluidas
+            </button>
+          </div>
+        </header>
+
+        <section class="hero-panel" aria-label="Resumo executivo">
+          <div class="hero-content">
+            <div class="hero-kicker">
+              <span class="live-dot"></span>
+              <span>Workspace online</span>
+            </div>
+            <p class="eyebrow">Proxima melhor acao</p>
+            <h2 id="priorityTitle">Crie sua primeira prioridade.</h2>
+            <p id="scoreHint">
+              Um painel SaaS completo para organizar tarefas, foco,
+              capacidade, progresso e automacoes.
+            </p>
+            <div class="hero-actions">
+              <a class="primary-link" href="#pipeline">Criar prioridade</a>
+              <a class="secondary-link" href="#analytics">Ver analytics</a>
+              <button class="secondary-link demo-button" type="button" id="loadDemo">
+                Carregar demo
+              </button>
+            </div>
+          </div>
+
+          <div class="executive-card" aria-label="Score de execucao">
+            <div class="score-ring">
+              <span id="completionScore">0%</span>
+              <small>delivery</small>
+            </div>
+            <div class="score-copy">
+              <strong id="dayStatus">Comecando</strong>
+              <span id="forecastText">Forecast disponivel apos tarefas.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="metric-row" aria-label="Metricas principais">
+          <article>
+            <span>Delivery</span>
+            <strong id="completionMetric">0%</strong>
+            <small>taxa de conclusao</small>
+          </article>
+          <article>
+            <span>Backlog ativo</span>
+            <strong id="openTasks">0</strong>
+            <small>itens em aberto</small>
+          </article>
+          <article>
+            <span>Deep work</span>
+            <strong id="focusMinutes">0m</strong>
+            <small id="focusSessions">0 sessoes</small>
+          </article>
+          <article>
+            <span>Risco operacional</span>
+            <strong id="riskScore">Baixo</strong>
+            <small id="riskHint">sem gargalos</small>
+          </article>
+        </section>
+
+        <section class="product-strip" aria-label="Confianca do produto">
+          <article>
+            <span class="strip-dot"></span>
+            <strong>99.9% uptime ready</strong>
+            <small>arquitetura preparada para operacao continua</small>
+          </article>
+          <article>
+            <span class="strip-dot"></span>
+            <strong id="cloudStatusTitle">Local-first</strong>
+            <small id="cloudStatusText">dados salvos no navegador e exportaveis</small>
+          </article>
+          <article>
+            <span class="strip-dot"></span>
+            <strong>PWA enabled</strong>
+            <small>instalavel quando publicado em servidor</small>
+          </article>
+        </section>
+
+        <div class="main-grid">
+          <section class="panel pipeline-panel" id="pipeline">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Execution pipeline</p>
+                <h2>Prioridades</h2>
+              </div>
+              <span id="taskCount">0 itens</span>
+            </div>
+
+            <form class="task-form" id="taskForm">
+              <input
+                id="taskInput"
+                type="text"
+                maxlength="90"
+                aria-label="Titulo da prioridade"
+                placeholder="Ex: entregar proposta para cliente enterprise"
+                autocomplete="off"
+                required
+              />
+              <select id="taskPriority" aria-label="Prioridade">
+                <option value="high">Alta</option>
+                <option value="medium" selected>Media</option>
+                <option value="low">Baixa</option>
+              </select>
+              <select id="taskArea" aria-label="Area">
+                <option value="Growth">Growth</option>
+                <option value="Produto">Produto</option>
+                <option value="Operacoes">Operacoes</option>
+                <option value="Financeiro">Financeiro</option>
+              </select>
+              <button type="submit">Adicionar</button>
+            </form>
+
+            <div class="task-toolbar">
+              <div class="filters" aria-label="Filtros de tarefas">
+                <button class="active" type="button" data-filter="all">Todas</button>
+                <button type="button" data-filter="open">Abertas</button>
+                <button type="button" data-filter="done">Feitas</button>
+                <button type="button" data-filter="high">Alta</button>
+              </div>
+              <label class="search-box">
+                <span>Buscar</span>
+                <input id="taskSearch" type="search" placeholder="Filtrar pipeline" />
+              </label>
+            </div>
+
+            <ul class="task-list" id="taskList" aria-live="polite"></ul>
+          </section>
+
+          <aside class="side-stack">
+            <section class="panel focus-panel" id="focus">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Focus room</p>
+                  <h2>Sessao guiada</h2>
+                </div>
+                <span class="status-pill" id="timerStatus">Pronto</span>
+              </div>
+
+              <div class="preset-row" aria-label="Duracao da sessao">
+                <button class="active" type="button" data-preset="25">25m</button>
+                <button type="button" data-preset="45">45m</button>
+                <button type="button" data-preset="60">60m</button>
+              </div>
+
+              <div class="timer" id="timerDisplay">25:00</div>
+              <div class="timer-actions">
+                <button type="button" id="startTimer">Iniciar</button>
+                <button type="button" id="pauseTimer">Pausar</button>
+                <button type="button" id="resetTimer">Resetar</button>
+              </div>
+            </section>
+
+            <section class="panel analytics-panel" id="analytics">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Analytics</p>
+                  <h2>Saude da operacao</h2>
+                </div>
+              </div>
+
+              <div class="progress-list">
+                <div>
+                  <span>Conclusao do pipeline</span>
+                  <progress id="taskProgress" value="0" max="100"></progress>
+                </div>
+                <div class="split-stats">
+                  <span>
+                    <strong id="doneTasks">0</strong>
+                    entregues
+                  </span>
+                  <span>
+                    <strong id="highPriorityCount">0</strong>
+                    criticas
+                  </span>
+                </div>
+                <div>
+                  <span>Distribuicao semanal</span>
+                  <div class="week-bars" id="weekBars" aria-hidden="true"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel automation-panel" id="automation">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Automacoes</p>
+                  <h2>Playbooks</h2>
+                </div>
+              </div>
+
+              <div class="automation-list">
+                <article>
+                  <span class="automation-icon">01</span>
+                  <div>
+                    <strong>Prioridade critica</strong>
+                    <p>Itens de alta prioridade sobem no forecast automaticamente.</p>
+                  </div>
+                </article>
+                <article>
+                  <span class="automation-icon">02</span>
+                  <div>
+                    <strong>Deep work</strong>
+                    <p>Blocos de foco alimentam o indicador de capacidade.</p>
+                  </div>
+                </article>
+                <article>
+                  <span class="automation-icon">03</span>
+                  <div>
+                    <strong>Risco do dia</strong>
+                    <p>Backlog aberto e tarefas criticas geram sinal operacional.</p>
+                  </div>
+                </article>
+              </div>
+
+              <div class="insight-box">
+                <span>Insight executivo</span>
+                <strong id="insightText">Comece adicionando uma prioridade.</strong>
+              </div>
+            </section>
+
+            <section class="panel onboarding-panel" aria-label="Onboarding">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Onboarding</p>
+                  <h2>Setup rapido</h2>
+                </div>
+              </div>
+
+              <div class="checklist">
+                <label>
+                  <input type="checkbox" checked />
+                  <span>Criar primeira prioridade</span>
+                </label>
+                <label>
+                  <input type="checkbox" />
+                  <span>Rodar uma sessao de foco</span>
+                </label>
+                <label>
+                  <input type="checkbox" />
+                  <span>Exportar workspace</span>
+                </label>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <section class="marketing-section trust-section" aria-label="Confianca">
+      <span>Projetado para equipes modernas</span>
+      <div class="trust-logos">
+        <strong>Growth</strong>
+        <strong>Produto</strong>
+        <strong>Operacoes</strong>
+        <strong>Financeiro</strong>
+        <strong>Leadership</strong>
+      </div>
+    </section>
+
+    <section class="marketing-section value-section" aria-label="Beneficios">
+      <div class="section-heading">
+        <p class="eyebrow">Plataforma completa</p>
+        <h2>Do planejamento a execucao, tudo no mesmo fluxo.</h2>
+      </div>
+
+      <div class="value-grid">
+        <article>
+          <span>01</span>
+          <h3>Prioridade com contexto</h3>
+          <p>
+            Organize tarefas por area, urgencia e status para enxergar o que
+            realmente move o dia.
+          </p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Foco mensuravel</h3>
+          <p>
+            Use sessoes guiadas para transformar intencao em tempo protegido e
+            acompanhar capacidade.
+          </p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Analytics operacional</h3>
+          <p>
+            Veja delivery, backlog, risco e sinais de gargalo antes que a rotina
+            saia do controle.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="marketing-section ux-section" aria-label="Design UX UI">
+      <div class="section-heading">
+        <p class="eyebrow">UX/UI system</p>
+        <h2>Interface pensada para velocidade, clareza e decisao.</h2>
+      </div>
+
+      <div class="ux-grid">
+        <article>
+          <span>Navigation</span>
+          <h3>Fluxo previsivel</h3>
+          <p>Overview, pipeline, foco e analytics seguem uma ordem natural de uso.</p>
+        </article>
+        <article>
+          <span>Feedback</span>
+          <h3>Resposta imediata</h3>
+          <p>Toasts, estados ativos, checklist e metricas mostram que cada acao funcionou.</p>
+        </article>
+        <article>
+          <span>Density</span>
+          <h3>Informacao escaneavel</h3>
+          <p>Cards compactos e hierarquia clara ajudam na leitura rapida.</p>
+        </article>
+        <article>
+          <span>A11y</span>
+          <h3>Acessibilidade</h3>
+          <p>Foco visivel, link de pular conteudo e controles semanticamente claros.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="marketing-section proof-section" aria-label="Resultados">
+      <div>
+        <p class="eyebrow">Resultado esperado</p>
+        <h2>Uma experiencia profissional para vender, apresentar ou usar.</h2>
+        <p>
+          O FocusFlow OS combina landing page, dashboard interativo e fluxo de
+          produtividade em HTML, CSS e JavaScript puro.
+        </p>
+      </div>
+
+      <div class="proof-grid">
+        <article>
+          <strong>4</strong>
+          <span>indicadores principais</span>
+        </article>
+        <article>
+          <strong>3</strong>
+          <span>modos de foco</span>
+        </article>
+        <article>
+          <strong>100%</strong>
+          <span>responsivo</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="marketing-section security-section" id="security" aria-label="Seguranca e qualidade">
+      <div class="section-heading">
+        <p class="eyebrow">Ultima qualidade</p>
+        <h2>Base solida para evoluir de site para SaaS real.</h2>
+      </div>
+
+      <div class="quality-grid">
+        <article>
+          <span>SEC</span>
+          <h3>Privacidade local</h3>
+          <p>Os dados ficam no navegador, com exportacao e importacao em JSON.</p>
+        </article>
+        <article>
+          <span>OPS</span>
+          <h3>Operacao observavel</h3>
+          <p>Risco, forecast, delivery e backlog aparecem como indicadores vivos.</p>
+        </article>
+        <article>
+          <span>PWA</span>
+          <h3>Experiencia de app</h3>
+          <p>Manifest, icone e service worker deixam o produto pronto para hosting.</p>
+        </article>
+        <article>
+          <span>UX</span>
+          <h3>Produtividade real</h3>
+          <p>Command palette, filtros, busca, foco guiado e feedback por toast.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="marketing-section integrations-section" aria-label="Integracoes">
+      <div class="section-heading">
+        <p class="eyebrow">Ecossistema</p>
+        <h2>Preparado para integrar com ferramentas profissionais.</h2>
+      </div>
+
+      <div class="integration-grid">
+        <article>Slack</article>
+        <article>Notion</article>
+        <article>Google Calendar</article>
+        <article>Jira</article>
+        <article>HubSpot</article>
+        <article>Zapier</article>
+      </div>
+    </section>
+
+    <section class="marketing-section testimonials-section" aria-label="Depoimentos">
+      <div class="section-heading">
+        <p class="eyebrow">Prova social</p>
+        <h2>Feito para transmitir confianca logo na primeira visita.</h2>
+      </div>
+
+      <div class="testimonial-grid">
+        <article>
+          <p>
+            "A experiencia parece produto de verdade: onboarding, dashboard,
+            foco e analytics no mesmo fluxo."
+          </p>
+          <strong>Marina Costa</strong>
+          <span>Head de Produto</span>
+        </article>
+        <article>
+          <p>
+            "O painel deixa claro o que esta em risco e o que precisa ser
+            executado primeiro."
+          </p>
+          <strong>Rafael Lima</strong>
+          <span>Operacoes</span>
+        </article>
+        <article>
+          <p>
+            "A landing e o app se conectam bem. Funciona para demonstracao,
+            portfolio e evolucao para SaaS."
+          </p>
+          <strong>Ana Ribeiro</strong>
+          <span>Growth</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="marketing-section faq-section" aria-label="Perguntas frequentes">
+      <div class="section-heading">
+        <p class="eyebrow">FAQ</p>
+        <h2>Perguntas comuns antes de evoluir para producao.</h2>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>O site funciona sem backend?</summary>
+          <p>Sim. As tarefas ficam salvas no navegador com localStorage.</p>
+        </details>
+        <details>
+          <summary>Posso hospedar como produto demonstravel?</summary>
+          <p>Sim. Os arquivos estaticos podem ir para qualquer hosting simples.</p>
+        </details>
+        <details>
+          <summary>Ele ja tem base para virar SaaS real?</summary>
+          <p>
+            Sim. A interface, dados, importacao/exportacao, PWA e fluxo de
+            produto criam uma boa base para backend, login e billing.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="marketing-section plans-section" id="plans" aria-label="Planos">
+      <div class="section-heading">
+        <p class="eyebrow">Planos</p>
+        <h2>Estrutura pronta para um SaaS real.</h2>
+      </div>
+
+      <div class="plans-grid">
+        <article>
+          <h3>Starter</h3>
+          <strong>Gratis</strong>
+          <p>Ideal para uso pessoal e organizacao diaria.</p>
+          <ul class="plan-features">
+            <li>Pipeline pessoal</li>
+            <li>Timer de foco</li>
+            <li>Exportacao JSON</li>
+          </ul>
+          <a href="#pipeline">Usar agora</a>
+        </article>
+        <article class="featured-plan">
+          <span class="plan-label">Recomendado</span>
+          <h3>Pro</h3>
+          <strong>R$ 29/m</strong>
+          <p>Pipeline, analytics, foco guiado e insights executivos.</p>
+          <ul class="plan-features">
+            <li>Analytics operacional</li>
+            <li>Command palette</li>
+            <li>Workspace demo</li>
+          </ul>
+          <a href="#pipeline" data-checkout-plan="pro">Comecar Pro</a>
+        </article>
+        <article>
+          <h3>Business</h3>
+          <strong>Custom</strong>
+          <p>Base para times, permissoes e dashboards compartilhados.</p>
+          <ul class="plan-features">
+            <li>Playbooks por area</li>
+            <li>Base para integracoes</li>
+            <li>PWA ready</li>
+          </ul>
+          <a href="#automation" data-checkout-plan="business">Ver recursos</a>
+        </article>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>FocusFlow OS</span>
+      <p>Site profissional com app SaaS funcional em HTML, CSS e JavaScript.</p>
+    </footer>
+
+    <div class="command-modal" id="commandModal" aria-hidden="true">
+      <div class="command-box" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+        <div class="command-head">
+          <div>
+            <p class="eyebrow">Command palette</p>
+            <h2 id="commandTitle">Acoes rapidas</h2>
+          </div>
+          <button type="button" id="commandClose" aria-label="Fechar command palette">
+            x
+          </button>
+        </div>
+        <div class="command-list">
+          <button type="button" data-command="focus">Iniciar sessao de foco</button>
+          <button type="button" data-command="pipeline">Ir para pipeline</button>
+          <button type="button" data-command="analytics">Abrir analytics</button>
+          <button type="button" data-command="demo">Carregar workspace demo</button>
+          <button type="button" data-command="export">Exportar workspace</button>
+          <button type="button" data-command="theme">Alternar tema</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

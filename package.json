@@ -1,0 +1,26 @@
+{
+  "name": "focusflow-os",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Clean SaaS productivity workspace built with HTML, CSS and JavaScript.",
+  "scripts": {
+    "dev": "npx serve . -l 5173",
+    "stripe:example": "node STRIPE_CHECKOUT_EXAMPLE.js"
+  },
+  "keywords": [
+    "saas",
+    "productivity",
+    "dashboard",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "stripe": "^14.25.0"
+  }
+}
